@@ -102,11 +102,22 @@ class ExamenServiceImplTest {
     }
 
     @Test
-    void testSave(){
+    void testReturnNull(){
         when(exmenRepository.findALl()).thenReturn(Datos.EXAMENES);
         //when(preguntaRepository.savePreguntas()).thenReturn(Datos.PREGUNTAS);
-        Examen examen = service.findExamenPorNombreConPreguntas(" ");
+        Examen examenSave = service.findExamenPorNombreConPreguntas(" ");
+        assertNull(examenSave);
+    }
 
-        assertNull(examen);
+    @Test
+    void testSave(){
+        when(exmenRepository.save(Datos.EXAMEN)).thenReturn(Datos.EXAMEN);
+        Examen examenVacio = exmenRepository.save(Datos.EXAMEN);
+
+        assertAll(
+                ()-> assertEquals("Química",examenVacio.getNombre()),
+                ()-> assertEquals(4L,examenVacio.getId()),
+                ()-> assertTrue(examenVacio.getPreguntas().isEmpty())
+        );
     }
 }
