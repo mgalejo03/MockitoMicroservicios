@@ -84,7 +84,7 @@ class ExamenServiceImplTest {
     }
 
     @Test
-    void testDoAnwer(){
+    void testDoAnswer(){
         when(exmenRepository.findALl()).thenReturn(Datos.EXAMENES);
         doAnswer(invocationOnMock -> {
             Long id = invocationOnMock.getArgument(0);
@@ -100,24 +100,20 @@ class ExamenServiceImplTest {
                 () -> assertEquals(0, examen.getPreguntas().size())
         );
     }
+    @Test
+    void testSave(){
+        when(exmenRepository.save(Datos.EXAMEN)).thenReturn(Datos.EXAMEN);
+        Examen examenSave = service.save(Datos.EXAMEN);
+        assertNotNull(examenSave);
+        assertEquals(Examen.class, service.save(examenSave).getClass());
+        assertEquals("Química",examenSave.getNombre());
+       assertEquals(4L, examenSave.getId());
+    }
 
     @Test
     void testReturnNull(){
         when(exmenRepository.findALl()).thenReturn(Datos.EXAMENES);
-        //when(preguntaRepository.savePreguntas()).thenReturn(Datos.PREGUNTAS);
-        Examen examenSave = service.findExamenPorNombreConPreguntas(" ");
-        assertNull(examenSave);
-    }
-
-    @Test
-    void testSave(){
-        when(exmenRepository.save(Datos.EXAMEN)).thenReturn(Datos.EXAMEN);
-        Examen examenVacio = exmenRepository.save(Datos.EXAMEN);
-
-        assertAll(
-                ()-> assertEquals("Química",examenVacio.getNombre()),
-                ()-> assertEquals(4L,examenVacio.getId()),
-                ()-> assertTrue(examenVacio.getPreguntas().isEmpty())
-        );
+        Examen examenVacio = service.findExamenPorNombreConPreguntas(" ");
+        assertNull(examenVacio);
     }
 }
